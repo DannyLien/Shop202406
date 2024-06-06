@@ -1,5 +1,6 @@
 package com.tom.shop202406
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,9 @@ import com.tom.shop202406.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private val RC_SIGNUP: Int = 200
+    private val signup: Boolean = false
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,12 +25,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (!signup) {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivityForResult(intent, RC_SIGNUP)
+        }
+
         setSupportActionBar(binding.toolbar)
 
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
