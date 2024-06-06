@@ -17,6 +17,7 @@ class SignUpActivity : AppCompatActivity() {
             val sEmail = binding.email.text.toString()
             val sPassword = binding.password.text.toString()
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(sEmail, sPassword)
+
         }
     }
 }
