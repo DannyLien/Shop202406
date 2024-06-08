@@ -2,6 +2,7 @@ package com.tom.shop202406
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,29 +11,48 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.google.firebase.auth.FirebaseAuth
 import com.tom.shop202406.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private val TAG = MainActivity::class.java.simpleName
+    private val signup: Boolean = false
     private val RC_NICKNAME: Int = 210
     private val RC_SIGNUP: Int = 200
-    private val signup: Boolean = false
+    val auth = FirebaseAuth.getInstance()
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        if (!signup) {
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivityForResult(intent, RC_SIGNUP)
+//        if (!signup) {
+//            val intent = Intent(this, SignUpActivity::class.java)
+//            startActivityForResult(intent, RC_SIGNUP)
+//        }
+        auth.addAuthStateListener { auth ->
+            authChanged(auth)
         }
-
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.contentMain.nickname.text = getNickname()
+    }
+
+    private fun authChanged(auth: FirebaseAuth) {
+        if (auth.currentUser == null) {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivityForResult(intent, RC_SIGNUP)
+        } else {
+            Log.d(TAG, "authChanged: ${auth.currentUser?.uid}")
         }
     }
 
@@ -44,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(intent, RC_NICKNAME)
             }
         }
-        if(requestCode==RC_NICKNAME){
+        if (requestCode == RC_NICKNAME) {
 
         }
     }

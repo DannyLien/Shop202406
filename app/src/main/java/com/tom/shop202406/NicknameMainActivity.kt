@@ -13,11 +13,7 @@ class NicknameMainActivity : AppCompatActivity() {
         binding = ActivityNicknameMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.done.setOnClickListener {
-            //TODO: nickname
-            getSharedPreferences("shop", MODE_PRIVATE)
-                .edit()
-                .putString("NICKNAME", binding.nick.text.toString())
-                .apply()
+            setNickname(binding.nick.text.toString())
             setResult(RESULT_OK)
             finish()
         }
