@@ -14,6 +14,7 @@ import com.tom.shop202406.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private val RC_NICKNAME: Int = 210
     private val RC_SIGNUP: Int = 200
     private val signup: Boolean = false
 
@@ -21,16 +22,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setSupportActionBar(binding.toolbar)
         if (!signup) {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivityForResult(intent, RC_SIGNUP)
         }
-
-        setSupportActionBar(binding.toolbar)
 
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -40,7 +38,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGNUP) {
+            if (resultCode == RESULT_OK) {
+                val intent = Intent(this, NicknameMainActivity::class.java)
+                startActivityForResult(intent, RC_NICKNAME)
+            }
+        }
+        if(requestCode==RC_NICKNAME){
 
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
