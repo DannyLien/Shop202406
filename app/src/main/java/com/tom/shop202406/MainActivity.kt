@@ -12,6 +12,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.tom.shop202406.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +48,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        binding.contentMain.nickname.text = getNickname()
+//        binding.contentMain.nickname.text = getNickname()
+        FirebaseDatabase.getInstance()
+            .getReference("users")
+            .child(auth.currentUser!!.uid)
+            .child("nickname")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    binding.contentMain.nickname.text = dataSnapshot.value as String
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
     }
 
     private fun authChanged(auth: FirebaseAuth) {
