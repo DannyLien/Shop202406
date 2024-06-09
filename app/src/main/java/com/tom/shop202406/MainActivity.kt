@@ -11,6 +11,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -44,6 +47,27 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+        //spinner
+        val colors = arrayOf("Red", "Green", "Blue")
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, colors)
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        binding.contentMain.spinner.adapter = adapter
+        binding.contentMain.spinner.onItemSelectedListener = 
+            object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    Log.d(TAG, "onItemSelected: ${colors[position]}")
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
+            }
     }
 
     override fun onResume() {
